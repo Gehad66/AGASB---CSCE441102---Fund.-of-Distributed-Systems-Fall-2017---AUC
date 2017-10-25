@@ -1,14 +1,14 @@
-#include "Message.h"
 #include <string.h>
+#include <stdio.h>
 
-/* int main(int argc, char *argv[])
+#include "Message.h"
+#include "Client.h"
+#include "Server.h"
+
+int main(int argc, char *argv[])
 {
   Message m(0, argv[1], strlen(argv[1]), 0);
+  Client client("127.0.0.1", 8080);
+  client.execute(&m);
   return 0;
-} */
-
-int main()
-{
-  Message m(0, const_cast<char*>("hello"), 5, 0);
-  return 0;
-}
+}  

@@ -1,5 +1,5 @@
 #include "Message.h"
-
+using namespace std;
 void* Message::getMessage () {
   return message;
 }
@@ -25,10 +25,10 @@ MessageType Message::getMessageType () {
 void Message::setOperation (int _operation){
 }
 
-void Message::setMessage (void *message, size_t message_size) {
-    this->message_size = message_size;
-    this->message = (void*) new char(message_size + 1);
-    strcpy((char*) this->message, (char*) message);
+void Message::setMessage (void *p_message, size_t p_message_size) {
+    this->message_size = p_message_size;
+    this->message = (void*) new char(p_message_size + 1);
+    strcpy((char*) this->message, (char*) p_message);
 }
 
 void Message::setMessageType (MessageType message_type) {
@@ -36,9 +36,9 @@ void Message::setMessageType (MessageType message_type) {
 }
 
 Message::Message (int operation, void *p_message, size_t p_message_size, int p_rpc_id) {
-  if (message_size) {
+  if (p_message_size) {
     rpc_id = p_rpc_id;
-    operation = operation;
+    this->operation = operation;
     setMessage(p_message, p_message_size);
   }
 }
