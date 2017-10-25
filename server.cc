@@ -45,8 +45,18 @@ Server::~Server() {}
 Message * Server::getRequest() {}
 
 Message Server::doOperation(Message * _message) {
-  return Message(0, const_cast<void *>((const void*)"Server reply"), strlen("Server reply"), 0);
+  char vowels[6] = "aeioy";
+  char * s = new char[strlen((char*)_message->getMessage()) + 1];
+  int counter = 0;
+  for (char * c = (char*) _message->getMessage(); *c; ++c) {
+    if (!std::binary_search(vowels, vowels + 5, *c)) {
+      s[counter++] = *c;
+    }
+  }
+  s[counter] = 0;
+  return Message(0, (void *) s, counter, 0);
 }
+
 
 void Server::sendReply (Message * _message) {}
 
