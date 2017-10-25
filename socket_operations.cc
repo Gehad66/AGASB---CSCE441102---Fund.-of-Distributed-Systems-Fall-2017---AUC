@@ -11,14 +11,14 @@
 
 namespace socket_operations
 {
-  void makeLocalSA (struct sockaddr_in *sa, int port=0)
+  void makeLocalSA (struct sockaddr_in *sa, int port=8080)
   {
     sa->sin_family = AF_INET;
     sa->sin_port = htons (port);
     sa->sin_addr.s_addr = htonl (INADDR_ANY);
   }
 
-  void makeDestSA (struct sockaddr_in *sa, char *hostname, int port)
+  void makeDestSA (struct sockaddr_in *sa, char *hostname, int port=8080)
   {
     struct hostent *host;
     sa->sin_family = AF_INET;
@@ -31,7 +31,7 @@ namespace socket_operations
     sa->sin_port = htons (port);
   }
 
-  void send (const Message & message, char *hostname, int port)
+  void send (const Message & message, char *hostname, int port=8080)
   {
     int s, n;
     struct sockaddr_in mySocketAddress, yourSocketAddress;
@@ -59,8 +59,17 @@ namespace socket_operations
     close (s);
     printf ("Socket closing successful\n");
   }				//end of sender
+  struct ReceivedMessage {
+    ReceivedMessage() {}
+    ReceivedMessage(const Message & _message, const struct sockaddr_in & _socket) {
+      message = _message;
+      socket = _socket;
+    }
+    Message message;
+    struct sockaddr_in socket;
+  };
 
-  void receive (int port)
+  ReceivedMessage receive (int port)
   {
     int SIZE = 1 << 13;
     char message[SIZE];
@@ -70,7 +79,7 @@ namespace socket_operations
     if ((s = socket (AF_INET, SOCK_DGRAM, 0)) < 0)
       {
 	perror ("Socket  failed");
-	return;
+	return ReceivedMessage();
       }
 
     makeLocalSA (&mySocketAddress, port);
@@ -79,7 +88,7 @@ namespace socket_operations
       {
 	perror ("Bind  failed\n");
 	close (s);
-	return;
+	return ReceivedMessage();
       }
 
     aLength = sizeof (aSocketAddress);
@@ -90,7 +99,10 @@ namespace socket_operations
       }
 
     printf ("Receive successful\n");
+//fork
     printf ("%s \n", message);
+
     close (s);
+    return ReceivedMessage(Message(0, (void *)message, strlen(message),0), aSocketAddress);
   }
 }

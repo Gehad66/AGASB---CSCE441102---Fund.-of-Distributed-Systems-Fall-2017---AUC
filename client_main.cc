@@ -5,9 +5,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "message.h"
-#include "client.h"
-#include "server.h"
+#include "Message.h"
+#include "Client.h"
+#include "Server.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,3 +16,4 @@ int main(int argc, char *argv[])
   client.execute(&m);
   return 0;
 }
+
