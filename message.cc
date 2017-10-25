@@ -1,7 +1,7 @@
 #include "message.h"
 
 using namespace std;
-void* Message::getMessage () {
+void* Message::getMessage () const{
   return message;
 }
 

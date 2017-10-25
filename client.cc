@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 
 #include "client.h"
+#include "socket_operations.cc"
 
 Client::Client(char * _hostname, int _port){
   this->hostname = new char(strlen(_hostname) + 1);
@@ -18,7 +19,8 @@ Client::Client(char * _hostname, int _port){
 }
 
 Message* Client::execute(Message * _message){
-  this->send(_message);
+  socket_operations::send(*_message, this->hostname, this->port);
+  // this->send(_message);
 }
 
 void Client::makeLocalSA (struct sockaddr_in *sa)
@@ -49,7 +51,7 @@ void Client::send(Message *_message)
 
   if ((s = socket (AF_INET, SOCK_DGRAM, 0)) < 0)
     {
-      perror ("socket failed");
+      perror ("Socket construction failed");
       return;
     }
 
@@ -57,7 +59,7 @@ void Client::send(Message *_message)
 
   if (bind (s, (const sockaddr*) &mySocketAddress, sizeof (struct sockaddr_in)) != 0)
     {
-      perror ("Bind Failed");
+      perror ("Bind Failed!");
       close (s);
       return;
 
@@ -65,14 +67,14 @@ void Client::send(Message *_message)
     }
 
   makeDestSA (&yourSocketAddress);
-  printf ("Before sending\n");
   if ((n =
        sendto (s, _message->getMessage(), strlen ((char*)_message->getMessage()), 0, (const sockaddr*)&yourSocketAddress,
-	       sizeof (struct sockaddr_in))) < 0)
+	       sizeof (struct sockaddr_in))) < 0) {
     perror ("Send failed\n");
-  printf ("After sending\n");
+  }
+  printf ("Send successful\n");
   close(s);
-  printf ("After closing\n");
+  printf ("Socket close successful\n");
 }
 
 void Client::receive() {}

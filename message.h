@@ -19,7 +19,7 @@ public:
   char *marshal ();
   int getOperation ();
   int getRPCId ();
-  void *getMessage ();
+  void *getMessage () const;
   size_t getMessageSize ();
   MessageType getMessageType ();
   void setOperation (int _operation);

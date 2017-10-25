@@ -1,12 +1,14 @@
 #include "message.h"
 #include "server.h"
+#include "socket_operations.cc"
 
 Server::Server(char * _listen_hostname, int _listen_port) {
   this->listen_hostname = _listen_hostname;
   this->listen_port = _listen_port;
 }
 void Server::serveRequest(){
-  this->receive();
+  socket_operations::receive(this->listen_port);
+  // this->receive();
 }
 Server::~Server() {}
 
