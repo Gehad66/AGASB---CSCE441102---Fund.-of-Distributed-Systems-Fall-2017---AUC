@@ -17,15 +17,15 @@ class Server
 {
 private:
 // UDPServerSocket * udpServerSocket;
-char * listen_hostname;
 int listen_port;
+int client_port;
+
 Message * getRequest();
-Message * doOperation();
+Message doOperation(Message *);
 void sendReply (Message * _message);
-void receive();
-void makeReceiverSA (struct sockaddr_in *sa);
+void print(const char * message);
 public:
-Server(char * _listen_hostname, int _listen_port);
+Server(int _listen_port, int _client_port);
 void serveRequest();
 ~Server();
 };

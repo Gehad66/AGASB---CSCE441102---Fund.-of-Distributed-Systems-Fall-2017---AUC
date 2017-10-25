@@ -14,14 +14,12 @@ class Client
 {
 private:
 // UDPClientSocket * udpSocket;
-char * hostname;
-int port;
-void send(Message *);
-void makeLocalSA (struct sockaddr_in *sa);
-void makeDestSA (struct sockaddr_in *sa);
-void receive();
+char * server_ip;
+int server_port;
+int listen_port;
+void print(const char * message);
 public:
-Client(char * _hostname, int _port);
+Client(char * _server_ip, int _server_port, int _listen_port);
 Message * execute(Message * _message);
 ~Client();
 };

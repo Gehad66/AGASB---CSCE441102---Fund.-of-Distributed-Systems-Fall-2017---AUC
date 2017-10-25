@@ -13,6 +13,7 @@ private:
   size_t message_size;
   int rpc_id;
 public:
+    Message();
     Message (int operation, void *p_message, size_t p_message_size,
 	     int p_rpc_id);
     Message (char *marshalled_base64);

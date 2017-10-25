@@ -1,14 +1,22 @@
+/* Args:
+ *   argv[1]: Listen port.
+ *   argv[2]: Client port.
+ *
+ * Example:
+ * ./server_main 8080 8081
+ */
+
 #include <string.h>
 #include <stdio.h>
 
-#include "Message.h"
-#include "Server.h"
+#include "message.h"
+#include "server.h"
 
 using namespace std; 
- 
-int main()
+
+int main(int argc, char *argv[])
 {
-  Server server((char*)"127.0.0.1", 8080);
+  Server server(atoi(argv[1]), atoi(argv[2]));
   server.serveRequest();
   return 0;
-}  
+}
