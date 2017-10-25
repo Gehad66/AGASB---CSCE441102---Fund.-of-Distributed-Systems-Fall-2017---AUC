@@ -1,9 +1,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "Message.h"
-#include "Client.h"
-#include "Server.h"
+#include "message.h"
+#include "client.h"
+#include "server.h"
 
 int main(int argc, char *argv[])
 {

@@ -1,9 +1,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "Message.h"
-#include "Client.h"
-#include "Server.h"
+#include "message.h"
+#include "server.h"
 
 using namespace std; 
 
