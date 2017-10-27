@@ -39,7 +39,7 @@ MessageType Message::getMessageType () const{
 void Message::setMessage (void *_message, size_t _message_size) {
     this->message_size = _message_size;
     this->message = (void*) new char(_message_size + 1);
-    strcpy((char*) this->message, (char*) _message);
+    strncpy((char*) this->message, (char*) _message, _message_size);
 }
 
 void Message::setMessageType (MessageType _message_type) {

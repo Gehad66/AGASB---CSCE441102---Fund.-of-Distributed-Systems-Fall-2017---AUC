@@ -107,13 +107,13 @@ namespace socket_operations
 	perror ("Receive failed");
         exit(-1);
       }
-
+    Message received_message(0, (void *)message, n, 0, Reply);
     char tmp[32];
     sprintf(tmp, "Received from %s: %d on %d.", inet_ntoa(aSocketAddress.sin_addr), ntohs(aSocketAddress.sin_port), port);
     print(tmp);
-    print(message);
+    print((const char *) received_message.getMessage());
 
     close (s);
-    return ReceivedMessage(Message(0, (void *)message, strlen(message),0, Reply), aSocketAddress);
+    return ReceivedMessage(received_message, aSocketAddress);
   }
 }
