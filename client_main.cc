@@ -1,7 +1,7 @@
 /* Args:
  *   argv[1]: Server IP address.
  *   argv[2]: Server port number.
- *   argv[3]: Listen port number.
+ *   argv[3]: Local port number.
  *   argv[4]: Message string to be sent to the server.
  *
  * Example:
@@ -17,7 +17,7 @@
 int main(int argc, char *argv[])
 {
   Client client(argv[1], atoi(argv[2]), atoi(argv[3]));
-  Message m(0, argv[4], strlen(argv[4]), 0);
+  Message m(0, argv[4], strlen(argv[4]), 0, Request);
   client.execute(&m);
   return 0;
 }

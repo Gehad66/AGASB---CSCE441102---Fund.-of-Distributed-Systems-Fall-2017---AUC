@@ -18,14 +18,14 @@ class Server
 private:
 // UDPServerSocket * udpServerSocket;
 int listen_port;
-int client_port;
 
 Message * getRequest();
 Message doOperation(Message *);
 void sendReply (Message * _message);
-void print(const char * message);
+
 public:
-Server(int _listen_port, int _client_port);
+
+Server(int _listen_port);
 void serveRequest();
 ~Server();
 };

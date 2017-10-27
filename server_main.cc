@@ -1,9 +1,8 @@
 /* Args:
  *   argv[1]: Listen port.
- *   argv[2]: Client port.
  *
  * Example:
- * ./server_main 8080 8081
+ * ./server_main 8080
  */
 
 #include <string.h>
@@ -16,7 +15,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-  Server server(atoi(argv[1]), atoi(argv[2]));
+  Server server(atoi(argv[1]));
   server.serveRequest();
   return 0;
 }

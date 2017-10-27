@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <stddef.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 
 namespace socket_operations
 {
@@ -27,14 +28,14 @@ namespace socket_operations
     sa->sin_family = AF_INET;
     if ((host = gethostbyname (hostname)) == NULL)
       {
-	print("Unknown host name.");
+	perror("Unknown host name.");
 	exit (-1);
       }
     sa->sin_addr = *(struct in_addr *) (host->h_addr);
     sa->sin_port = htons (port);
   }
 
-  void send (const Message & message, char *hostname, int port)
+  void send (const Message & message, char *hostname, int port, int local_port = 0)
   {
     int s, n;
     struct sockaddr_in mySocketAddress, yourSocketAddress;
@@ -42,28 +43,33 @@ namespace socket_operations
     if ((s = socket (AF_INET, SOCK_DGRAM, 0)) < 0)
       {
 	perror ("socket failed");
-	return;
+	exit(-1);
       }
-    makeLocalSA (&mySocketAddress, 0);
+    makeLocalSA (&mySocketAddress, local_port);
 
     if (bind (s, (const sockaddr*) &mySocketAddress, sizeof (struct sockaddr_in)) != 0)
       {
 	perror ("Bind Failed");
 	close (s);
-	return;
+	exit(-1);
       }
 
     makeDestSA (&yourSocketAddress, hostname, port);
     if ((n =
 	 sendto (s, message.getMessage (), strlen ((const char *) message.getMessage ()), 0,
 		 (const sockaddr*) &yourSocketAddress, sizeof (struct sockaddr_in))) < 0)
-      perror ("Send failed\n");
-    print("Send successful.");
+      {perror ("Send failed");}
+
+    char tmp[32];
+    sprintf(tmp, "Sent to %s: %d from %d", hostname, port, local_port);
+    print(tmp);
+    print((const char *) message.getMessage());
+
     close (s);
-    print("Socket closing successful.");
-  }				//end of sender
-  struct ReceivedMessage {
-    ReceivedMessage() {}
+  }				//end of send
+
+  class ReceivedMessage {
+  public:
     ReceivedMessage(const Message & _message, const struct sockaddr_in & _socket) {
       message = _message;
       socket = _socket;
@@ -82,30 +88,32 @@ namespace socket_operations
     if ((s = socket (AF_INET, SOCK_DGRAM, 0)) < 0)
       {
 	perror ("Socket  failed");
-	return ReceivedMessage();
+	exit(-1);
       }
 
     makeLocalSA (&mySocketAddress, port);
 
     if (bind (s, (const sockaddr*) &mySocketAddress, sizeof (struct sockaddr_in)) != 0)
       {
-	perror ("Bind  failed\n");
+	perror ("Bind  failed");
 	close (s);
-	return ReceivedMessage();
+	exit(-1);
       }
 
     aLength = sizeof (aSocketAddress);
     aSocketAddress.sin_family = AF_INET;	/* note that this is needed */
     if ((n = recvfrom (s, message, SIZE, 0, (sockaddr*) &aSocketAddress, (socklen_t*) &aLength)) < 0)
       {
-	perror ("Receive 1");
+	perror ("Receive failed");
+        exit(-1);
       }
 
-    print("Receive successful.");
-//fork
+    char tmp[32];
+    sprintf(tmp, "Received from %s: %d on %d.", inet_ntoa(aSocketAddress.sin_addr), ntohs(aSocketAddress.sin_port), port);
+    print(tmp);
     print(message);
 
     close (s);
-    return ReceivedMessage(Message(0, (void *)message, strlen(message),0), aSocketAddress);
+    return ReceivedMessage(Message(0, (void *)message, strlen(message),0, Reply), aSocketAddress);
   }
 }

@@ -16,11 +16,10 @@ private:
 // UDPClientSocket * udpSocket;
 char * server_ip;
 int server_port;
-int listen_port;
-void print(const char * message);
+int local_port;
 public:
 Client(char * _server_ip, int _server_port, int _listen_port);
-Message * execute(Message * _message);
+Message execute(Message * _message);
 ~Client();
 };
 #endif // CLIENT_H

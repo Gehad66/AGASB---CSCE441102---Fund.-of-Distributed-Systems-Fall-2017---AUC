@@ -7,25 +7,28 @@ enum MessageType { Request, Reply };
 class Message
 {
 private:
-  MessageType message_type;
-  int operation;
   void *message;
   size_t message_size;
+  MessageType message_type;
+  int operation;
   int rpc_id;
 public:
-    Message();
-    Message (int operation, void *p_message, size_t p_message_size,
-	     int p_rpc_id);
-    Message (char *marshalled_base64);
-  char *marshal ();
-  int getOperation ();
-  int getRPCId ();
-  void *getMessage () const;
-  size_t getMessageSize ();
-  MessageType getMessageType ();
-  void setOperation (int _operation);
-  void setMessage (void *message, size_t message_size);
-  void setMessageType (MessageType message_type);
+  Message();
+  Message (int _operation, void *_message, size_t _message_size,
+	   int _rpc_id, MessageType _message_type);
+  Message (char *_marshalled_base64);
    ~Message ();
+  char *marshal ();
+
+  void *getMessage () const;
+  size_t getMessageSize () const;
+  MessageType getMessageType () const;
+  int getOperation () const;
+  int getRPCId () const;
+
+  void setMessage (void *_message, size_t _message_size);
+  void setMessageType (MessageType _message_type);
+  void setOperation (int _operation);
+  void setRPCId(int _rpc_id);
 };
 #endif // MESSAGE_H
