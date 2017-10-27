@@ -33,8 +33,6 @@ void Server::serveRequest(){
       break;
     }
   }
-
-
 }
 
 Server::~Server() {}
@@ -43,7 +41,7 @@ Message * Server::getRequest() {}
 
 Message Server::doOperation(Message * _message) {
   char vowels[6] = "aeioy";
-  char * s = new char[strlen((char*)_message->getMessage()) + 1];
+  char * s = new char[_message->getMessageSize() + 1];
   int counter = 0;
   for (char * c = (char*) _message->getMessage(); *c; ++c) {
     if (!std::binary_search(vowels, vowels + 5, *c)) {

@@ -11,7 +11,8 @@ Message::Message (char *_marshalled_base64) {}
 
 Message::Message (){}
 
-Message::~Message (){}
+Message::~Message (){
+}
 
 char* Message::marshal (){}
 
